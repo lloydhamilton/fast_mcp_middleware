@@ -1,0 +1,65 @@
+[project]
+name = "fastmcp-auth-middleware"
+version = "0.1.0"
+description = "FastMCP Auth Middleware."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "boto3>=1.37.37",
+    "dotenv>=0.9.9",
+    "fastapi>=0.115.12",
+    "fastmcp>=2.2.6",
+    "loguru>=0.7.3",
+    "mcp[cli]>=1.6.0",
+    "notebook>=7.3.3",
+    "pandas>=2.2.3",
+    "pydantic>=2.11.4",
+]
+[dependency-groups]
+dev = [
+    "notebook>=7.3.3",
+    "pytest>=8.3.5",
+    "ruff>=0.11.4",
+]
+
+
+[tool.ruff.lint]
+select = [
+    # pydocstyle
+    "D",
+    # Google style
+    "G",
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+    # flake8-annotations
+    "ANN",
+]
+
+ignore = [
+    # flask8-annotations for self
+    "ANN101",
+    "ANN102",
+    "ANN204",
+    "G004",
+    "D100",
+    "D107"
+]
+
+exclude = [
+    "*.ipynb",
+    "__init__.py"
+]
+
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
