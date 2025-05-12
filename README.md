@@ -19,6 +19,7 @@ Create a `.env` file in the root directory with the following variables:
 ```env
 USER_POOL_CLIENT_ID=<YOUR_USER_POOL_CLIENT_ID>
 USER_POOL_CLIENT_SECRET=<YOUR_USER_POOL_CLIENT_SECRET>
+COGNITO_USER_POOL_ID=<YOUR_USER_POOL_ID>
 ```
 
 ## Starting the server
