@@ -1,18 +1,30 @@
 import logging
+import os
 
 import requests
+from dotenv import load_dotenv
 from fastmcp.client import Client
 from fastmcp.client.transports import SSETransport
 from loguru import logger
 
 logging.basicConfig(level=logging.DEBUG)
+load_dotenv(os.path.join(os.path.dirname(__file__), "../.env"))
 
-async def main():
+CLIENT_ID = os.getenv("CLIENT_ID")
+CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+
+
+async def main() -> None:
+    """Main function to test the authenticated FastMCP client."""
     response = requests.post(
-        'https://hypergent.auth.eu-west-1.amazoncognito.com/oauth2/token',
-        data="grant_type=client_credentials&client_id=7c8li2itj8kjof3s8t0tapmjje&client_secret=18vhmqne6bbaedafknho15d584f4tv67stg120o7hf1ljiqknt64&scope=fastmcp/read",
-        headers={'Content-Type': 'application/x-www-form-urlencoded'}
+        "https://hypergent.auth.eu-west-1.amazoncognito.com/oauth2/token",
+        data=f"grant_type=client_credentials&"
+        f"client_id={CLIENT_ID}&"
+        f"client_secret={CLIENT_SECRET}&"
+        f"scope=fastmcp/read",
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
+    response.raise_for_status()
     transport = SSETransport(
         url="http://127.0.0.1:8000/sse",
         headers={
@@ -26,10 +38,6 @@ async def main():
             "test", arguments={"payload": {"test": "value"}}
         )
         logger.info(f"Tool result: {result}")
-    #
-    # async with sse_client("http://127.0.0.1:8080/sse") as (read, write):
-    #     async with ClientSession(read, write) as session:
-    #         await session.initialize()
 
 
 if __name__ == "__main__":

@@ -18,6 +18,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 class AuthenticatedFastMCP(FastMCP):
+    """A subclass of FastMCP that adds authentication middleware."""
+
     def sse_app(self) -> Starlette:
         """Return an instance of the SSE server app."""
         sse = SseServerTransport(self.settings.message_path)

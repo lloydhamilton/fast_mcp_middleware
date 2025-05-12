@@ -1,9 +1,7 @@
-import json
 import logging
 
 import jwt
 from starlette.authentication import AuthenticationError
-from starlette.datastructures import MutableHeaders
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.requests import Request
 from starlette.responses import Response
@@ -73,43 +71,15 @@ class McpAuthentication(BaseHTTPMiddleware):
     async def dispatch(
         self, request: Request, call_next: RequestResponseEndpoint
     ) -> Response:
-        # Could you change the main body here to add meta data? For scopes etc.
         if "Authorization" not in request.headers:
             response = Response(status_code=401)
             return response
         try:
             bearer_token = request.headers["Authorization"]
             token = self._process_bearer_token(bearer_token)
-            validated_token = self._validate_token(token)
+            _ = self._validate_token(token)
         except AuthenticationError as e:
             response = Response(status_code=403)
             log.error(e)
             return response
-
-        original_body = await request.body()
-        log.debug(f"Original body: {original_body}")
-        try:
-            body_data = json.loads(original_body)
-            if "params" in body_data.keys():
-                body_data["params"] = body_data["params"] | validated_token
-            modified_body = json.dumps(body_data).encode("utf-8")
-
-            async def changed_receive() -> dict:
-                return {
-                    "type": "http.request",
-                    "body": modified_body,
-                    "more_body": False,
-                }
-
-            modified_request = Request(request.scope, changed_receive, request._send)
-
-            headers = MutableHeaders(request.headers)
-            headers["content-length"] = str(len(modified_body))
-            modified_request._headers = headers
-
-            log.debug(f"Modified body: {await modified_request.body()}")
-        except json.JSONDecodeError:
-            log.error("Invalid JSON body")
-            modified_request = request
-            # return Response(status_code=400, content="Invalid JSON body")
-        return await call_next(modified_request)
+        return await call_next(request)
