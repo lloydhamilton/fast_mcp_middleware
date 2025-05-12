@@ -1,14 +1,17 @@
 import logging
+import os
 
 import jwt
+from dotenv import load_dotenv
 from starlette.authentication import AuthenticationError
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.requests import Request
 from starlette.responses import Response
 
+load_dotenv(os.path.join(os.path.dirname(__file__), "../../../../.env"))
 log = logging.getLogger(__name__)
 
-COGNITO_USER_POOL_ID = "eu-west-1_vi9honYY0"
+COGNITO_USER_POOL_ID = os.environ.get("COGNITO_USER_POOL_ID")
 COGNITO_REGION = "eu-west-1"
 JWKS_URL = f"https://cognito-idp.{COGNITO_REGION}.amazonaws.com/{COGNITO_USER_POOL_ID}/.well-known/jwks.json"
 

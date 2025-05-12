@@ -10,8 +10,8 @@ from loguru import logger
 logging.basicConfig(level=logging.DEBUG)
 load_dotenv(os.path.join(os.path.dirname(__file__), "../.env"))
 
-CLIENT_ID = os.getenv("CLIENT_ID")
-CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+CLIENT_ID = os.getenv("USER_POOL_CLIENT_ID")
+CLIENT_SECRET = os.getenv("USER_POOL_CLIENT_SECRET")
 
 
 async def main() -> None:

@@ -31,7 +31,7 @@ source .venv/bin/activate
 This will create a virtual environment and install all the required packages.
 
 ```bash
-python src/mcp_services/standard/server.py
+python src/mcp_services/auth_mcp/server.py
 ```
 
 ## Testing the server
