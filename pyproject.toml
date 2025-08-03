@@ -8,9 +8,9 @@ dependencies = [
     "boto3>=1.37.37",
     "dotenv>=0.9.9",
     "fastapi>=0.115.12",
-    "fastmcp>=2.2.6",
+    "fastmcp>=2.11.0",
     "loguru>=0.7.3",
-    "mcp[cli]>=1.6.0",
+    "mcp[cli]>=1.9.4",
     "mcpengine[cli]>=0.3.0",
     "notebook>=7.3.3",
     "pandas>=2.2.3",
@@ -64,3 +64,6 @@ exclude = [
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+#
+#[tool.uv.sources]
+#mcp = { git = "https://github.com/modelcontextprotocol/python-sdk" }

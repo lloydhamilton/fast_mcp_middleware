@@ -1,18 +1,17 @@
-import logging
 import os
 
 import jwt
 from dotenv import load_dotenv
+from loguru import logger as log
 from starlette.authentication import AuthenticationError
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.requests import Request
 from starlette.responses import Response
 
 load_dotenv(os.path.join(os.path.dirname(__file__), "../../../../.env"))
-log = logging.getLogger(__name__)
 
 COGNITO_USER_POOL_ID = os.environ.get("COGNITO_USER_POOL_ID")
-COGNITO_REGION = "eu-west-1"
+COGNITO_REGION = "eu-west-2"
 JWKS_URL = f"https://cognito-idp.{COGNITO_REGION}.amazonaws.com/{COGNITO_USER_POOL_ID}/.well-known/jwks.json"
 
 
@@ -74,13 +73,14 @@ class McpAuthentication(BaseHTTPMiddleware):
     async def dispatch(
         self, request: Request, call_next: RequestResponseEndpoint
     ) -> Response:
+        """Process the request to authenticate it."""
         if "Authorization" not in request.headers:
             response = Response(status_code=401)
             return response
         try:
             bearer_token = request.headers["Authorization"]
             token = self._process_bearer_token(bearer_token)
-            _ = self._validate_token(token)
+            request.state.decoded_token = self._validate_token(token)
         except AuthenticationError as e:
             response = Response(status_code=403)
             log.error(e)
