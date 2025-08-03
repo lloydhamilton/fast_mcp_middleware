@@ -24,6 +24,7 @@ mcp = FastMCP("MCPDemo")
 
 class Payload(BaseModel):
     """Payload for the test tool."""
+
     test: str = Field(..., description="Test payload for the tool.")
 
 
@@ -42,8 +43,9 @@ class authorise:
 
     def __call__(self, func: F) -> F:
         """Decorator to check if the user has the required scope."""
+
         @wraps(func)
-        async def wrapper(*args, **kwargs) -> Callable: # ruff: noqa
+        async def wrapper(*args, **kwargs) -> Callable:  # ruff: noqa
             # grab the current request
             request = get_http_request()
 
